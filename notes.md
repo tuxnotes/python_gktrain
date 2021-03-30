@@ -143,12 +143,109 @@ a, b = b, a
 **TCP协议**
 爬虫被封，是IP层被封，则更换代理IP
 如果是HTTP层被封，则可能需要登录，或更改HTTP层的其他配置
-## 3.1 编写爬虫需要掌握HTTP、HTML基础只是
+## 3.1 编写爬虫需要掌握HTTP、HTML基础知识
+### 3.1.1 HTTP与HTML的关系
+- W3C标准
+- HTML常用的标签和属性
+- 网页的三大组成部分：结构、表现、行为
+结构：就是html，xml，爬虫就是爬结构，是我们重点关注的。
+表现：CSS样式表，后面将flask会套一个bootstrap的样式表
+行为：DOM数，js
+浏览器中输入域名，浏览器会将其封装成HTTP协议。
+
+client --> socket(tcp)
+server ---> socket--->web server
+### 3.1.2 HTML
+HTML不是编程语音，是一套标记，使用标记来描述网页的结构。对于数据获取，经常获取下面的标记：
+<html>内容</html>
+<head>内容</head>
+<body>内容</body>，在此标记之间可以包含如<p></p>标记
+<img src="路径/文件名．图片格式"width="属性值"height="属性值"border="属性值"alt="属性值">
+<a href="链接地址"target="打开方式"name="页面锚点名称">链接文字或者图片</a>
+<div>：内容划分元素
+<span>：<span> 与 <div> 元素很相似，但 <div> 是一个块元素，而 <span> 则是行内元素 。
+HTML内容的匹配，则需要XPath.
+BeatifulSoap是一个Python的库，而Xpath是一种匹配的技术。因此beatifulsoap不能直接与xpath对比，但是使用Python实现xpath技术的库(如lxml)可以用来与bs对比,即bs4可以与lxml进行横向对比。
+bs4性能较差，主要是因为其底层是基于DOM的，将文档都载入，解析整个的DOM树。因此不管是时间，还是内存，开销都比较大。但其后期也整合了lxml
+lxml是基于C和C++写的。
+### 3.1.3 CSS
+层叠样式表（Cascading Style Sheets）
+**用途：解决内容与表现分离的问题**
+内联样式表
+<body style="background-color:red; "></body>
+嵌入式样式表
+写在 <style type=“ text/css”></style> 标记之间
+外部样式
+写为 .css 文件
+<link rel="StyleSheet" type="text/css" href="style.css">
+
+### 3.1.4 JavaScript
+轻量级的脚本语言，由浏览器进行解释执行。
+直接引用
+在 <script></script> 标记中编写代码
+外部引用
+使用单独 .js 文件
+
+### 3.1.5 JSON
+JavaScript 对象表示法（JavaScript Object Notation）
+• 多用于存储和交换文本信息
+• Web 前端中运用非常广泛
+• JSON 使用 JavaScript 语法来描述数据对象，但独立于语言和平台
+• JSON 解析器和 JSON 库支持许多不同的编程语言
 
 ## 3.2 urllib,requests库的深入讲解
 如何拿到cookie后继续请求。
 两种登录方式
 ## 3.3 XPath的用法
+七种类型的节点：元素、属性、文本、命名空间、处理指令、注释以及文档（根）节点。
+xpath搜索的时候，节点之间是有前后的关系的
+节点关系：
+• 父（Parent）
+• 子（Child）
+• 同胞（Sibling）
+• 先辈（Ancestor）
+• 后代（Descendant）
+
+为什么需要节点之间的关系呢，因为在匹配的时候，需要通过网页的一些内容进行匹配。
+
+XPath 是沿着路径来选取节点的
+
+### 3.3.1 XPath 路径表达式：
+- nodeName：节点下所有的子节点
+- / : 根节点选取
+- // : 任意位置选取
+- . : 当前节点
+- .. : 当前节点的父节点
+- @ :选取属性
+
+在F12后，找到关心的内容，鼠标右键---->Copy ---> 
+Copy XPath从任意的位置去找
+例如： //*[@id="content"]/p[4]
+Copy full xpath则显示从根开始的
+/html/body/div[2]/div/div[1]/div[3]/p[4]
+如果是从任意位置去找，则匹配所有的。例如对于所有的div，css的样式并不是完全一样的，因此可以通过id和type进行区分
+
+### 3.3.2 XPath 谓语（选取位置）
+谓语即是[]中的内容
+
+| 选取的为位置   | 写法                                                        |
+| -------------- | ----------------------------------------------------------- |
+| 第一个元素     | /root/path/to/node[1]                                       |
+| 最后一个元素   | node[last()]                                                |
+| 倒数第二个元素 | node[ last() - 1 ]                                          |
+| 选择属性       | //nodep[@name] ，//nodep[@name='value'] ，//nodep[@name>100 |
+| 可以使用通配符 | * 和|                                                        |
+
+XPath基本上能匹配到80%-90%的内容，但还有一部分是匹配不到的，此时就可以使用模拟浏览器的功能，一个webdriver的工具
 
 
-01:45
+
+
+
+
+
+
+
+
+
+
