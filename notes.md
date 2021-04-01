@@ -238,6 +238,21 @@ Copy full xpath则显示从根开始的
 
 XPath基本上能匹配到80%-90%的内容，但还有一部分是匹配不到的，此时就可以使用模拟浏览器的功能，一个webdriver的工具
 
+## 3.4 request详解
+
+### 3.4.1 urllib
+历史上出现的 urllib、urllib2、urllib3 库的区别和联系：
+• Python2 中，urllib 和 urllib2 是 python 的标准库，urllib2 是 urllib 的增强版。
+• Python3 中，urllib2 合并到 urllib 中。
+• urllib3 提供现场安全连接池和文件 post 支持。
+### 3.4.2 requests
+
+爬虫框架scrapy底层使用的是urllib3，requests底层也是.requests封装的更人性化
+cookie：没两次的连接默认是没有关系的，cookie是服务器生成交给客户端的，携带cookie的多次连接可以当做同一次连接
+大文件下载：文件分块
+
+
+
 
 
 
