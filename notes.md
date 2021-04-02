@@ -265,6 +265,22 @@ cookie: 首先使用requests进行一次模拟请求，获得cookie，后续请�
 
 # 4 面向对象与设计模式
 ## 4.1 变量作用域
+高级语言对变量的使用：
+• 变量声明
+• 定义类型（分配内存空间大小）
+• 初始化（赋值、填充内存）
+• 引用（通过对象名称调用对象内存数据）
+Python 和高级语言有很大差别，在模块、类、函数中定义，才有作用域的概念。
+Python 作用域遵循 LEGB 规则。
+
+**LEBG**
+- L：Local(function);函数内部的名字空间
+- E：Enclosing function locals：外部嵌套函数的名字空间，如closure
+- G: Global(module):函数定义所在模块(文件)的名字空间
+- B：Builtin(python):python内置模块的名字空间
+
+为什么要知道LEGB？同名不同作用域变量的查找顺序
+
 ### 4.1.1 变量
 命名问题
 关键字：
@@ -309,9 +325,77 @@ print(p)
 deque
 counter
 
+## 4.3 类型的继承关系
 
+命令行中输入：
+```
+().__class__.__bases__[0].__subclass__
+```
+表示元组()所属的类__class__,基类__bases__[0],及其子类__subclass__
 
+基本数据类型的内部继承关系参考：https://docs.python.org/zh-cn/3/library/collections.abc.html
 
+# 5 函数
 
+函数加()表示将函数体的内容执行一下，不加()表示传了一个函数的对象。
 
+## 5.1 函数的可变参数
 
+参数组合 定义顺序：必选参数 默认参数 可变：关键字参数 命名参数
+
+## 5.2 高阶函数
+
+高阶：参数是函数或返回值也是函数
+常见的高阶函数：map reduce filter 
+
+高阶函数中常用的是偏函数：将其中部分参数固定
+```python
+
+def add(x,y):
+   return x+y
+
+import functools
+
+add_1 = functools.partial(add,1) # add函数其中一个参数固定为1，
+add_1(100) # 101
+```
+片函数可以使用闭包实现，但Django采用的是偏函数。
+片函数的用途：日志上报会进行邮件的分发，收件人有不同的人，比如admin@   user@ manager@  other@
+partial(admin, 'log'),当然可以使用闭包实现。Django和flask固定参数的时候采用偏函数
+
+函数是一个对象，可以作为某个函数的返回结果
+```python
+def line_conf():
+   def line(x):
+      return 2*x + 1
+   return line # 返回一个函数对象
+
+my_line = line_conf() # my_line指向内层函数
+print(my_line(5)) # 调用内层函数
+```
+**外层函数返回的是内层函数的函数名**
+
+```python
+def line_conf():
+   b = 10
+   def line(x):
+      return 2*x + b
+   return line # 返回一个函数对象
+
+my_line = line_conf() # my_line指向内层函数
+print(my_line(5)) # 调用内层函数
+```
+b与内层函数组成闭包
+工作一般不会面试闭包，但会面试装饰器
+```python
+def line_conf(a,b):  
+   def line(x):
+      return a*x + b
+   return line # 返回一个函数对象
+
+line1 = line_conf(1,1)
+line2 = line_conf(4,5)
+print(line1(5),line2(5)) 
+```
+
+nonlocal:访问外部函数的局部变量
