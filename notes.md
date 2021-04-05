@@ -399,3 +399,34 @@ print(line1(5),line2(5))
 ```
 
 nonlocal:访问外部函数的局部变量
+
+# WEEK TWO
+
+# 1 闭包与装饰器
+## 1.1 闭包
+### 1.1.1 闭包原理
+闭包是什么：延伸了作用域的函数
+函数名.__code__.co_freevars
+查看编译后的函数定义体，Enclosing作用域的变量（LEGB）
+函数名.__closure__[0].cell_contents
+查看这些cell对象的 cell_contents属性，即freevars对应的值
+**作用： 调用函数时，仍然可以使用绑定的值（虽然作用域不可用）**
+## 1.2 装饰器
+强大的内置装饰器
+
+用途：数据库操作；用户验证操作；日志；访问授权；
+
+增强而不改变原有函数
+装饰器强调函数的定义态而不是运行态
+装饰器语法糖的展开：
+```python
+@decorate
+def target():
+   print('do something')
+
+def target():
+   print('do something')
+
+target = decorate(target)
+```
+装饰器本质是函数，装饰器部分首先要注意函数带括号和不带括号的区别
