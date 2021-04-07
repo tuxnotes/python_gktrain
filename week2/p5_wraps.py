@@ -24,3 +24,49 @@ def outer_arg(bar):
         return inner
     return outer
 
+@outer_arg('foo_arg')
+def foo(a,b,c):
+    """ doc """
+    return(a+b+c)
+
+print(foo.__name__)
+
+# 如果不使用wraps，则foo的函数名会替换成inner,文档也会替换成inner的注释文档
+
+##################################
+# flask 使用@wraps的案例
+from functools import wraps
+def requires_auth(func):
+    @wraps
+    def auth_method(*args, **kwargs):
+        if not auth:
+            authenticate()
+        return func(*args, **kwargs)
+    return auth_method
+
+@requires_auth
+def func_demo():
+    pass
+
+
+######################################
+# 日志功能
+from functools import wraps
+
+def logit(logfile='out.log'):
+    def logging_decorator(func):
+        def wrapped_function(*args, **kwargs):
+            logs_string = func.__name__ + "was called"
+            print(logs_string)
+            with open(logfile, 'a') as opened_file:
+                opened_file.write(logs_string+'\n')
+            return func(*args,**kwargs)
+        return wrapped_function
+    return logging_decorator
+
+@logit()
+def myfunc1():
+    pass
+
+myfunc1()
+# output: myfunc1 was called
