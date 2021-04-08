@@ -71,5 +71,39 @@ h1.noattr
 
 # __getattribute__底层原理是描述器
 
+class Desc(object):
+    """
+    通过打印来展示描述器的访问流程
+    """
+    def __init__(self, name):
+        self.name = name
 
+    def __get__(self, instance, owner):
+        print(f'__get__{instance} {owner}')
+        return self.name
 
+    def __set__(self, instance, value):
+        print(f'__set__{instance} {value}')
+        self.name = value
+
+    def __delete__(self, instance):
+        print(f'__delete__{instance}')
+        del self.name
+
+class MyObject(object):
+    a = Desc('aaaa')
+    b = Desc('bbbb')
+
+if __name__ == '__main__':
+    inst = MyObject()
+    print(inst.a)
+    inst.a = 456
+    print(inst.a)
+
+# __getattribute__纯Python实现
+def __getattribute__(self, key):
+    """Emulate get_attro() in Objects/typeobject.c"""
+    v = object.__getattribute__(self, key)
+    if hasattr(v, '__get__'):
+        return v.__get__(None, self)
+    return v
