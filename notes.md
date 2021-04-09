@@ -475,4 +475,94 @@ Python不支持多态，使用鸭子类型
 工厂：传入不同的参数，返回不同类的实例
 动态属性工厂模式
 
+# WEEK THREE
+# 1 Scrapy框架
+## 1.1 为什么要学框架
+### 1.1.1 SOLID原则
+- Single Responsibility Principle 单一职责原则：一个类只有一个改写的理由。把大类拆成小类
+- Open / Closed Principle 开闭原则：类对扩展开放，对修改封闭
+- Liskov Substitution Principle 里氏替换原则
+- Interface Segregation Principle 接口分离原则
+- Dependency Inversion Principle 依赖倒置原则
+
+Python中除了库之外，还有一个能让我们分解程序的就是框架。将单体的应用程序拆分成框架。
+SOLID原则与设计模式不同。如何将需求转换为代码，只是知道原则，
+## 1.2 Scrapy 框架介绍
+Scrapy 核心组件
+引擎           -无需修改
+调度器         -无需修改
+下载器         -无需修改
+爬虫器         -需要修改
+管道           -需要修改
+下载器中间件   -无需修改
+爬虫器中间件   -无需修改
+
+```bash
+pip install scrapy
+```
+scrapy底层依赖twisted库
+创建项目
+```bash
+scrapy startproject demo1
+cd demo1
+scrapy genspider example example.com # 创建一个爬虫
+scrapy crawl example # 加上--nolog关闭debug信息
+```
+
+items.py 定制返回的内容
+pipelines.py 将内容保存到目标位置
+
+创建豆瓣项目:第一版，只是将单体的爬虫分散到框架中
+
+```bash
+(geektime) tux@dev01:~/Projects/python/python_gk/week3$ scrapy startproject doubanbook
+New Scrapy project 'doubanbook', using template directory '/home/tux/.virtualenvs/geektime/lib/python3.9/site-packages/scrapy/templates/project', created in:
+    /home/tux/Projects/python/python_gk/week3/doubanbook
+
+You can start your first spider with:
+    cd doubanbook
+    scrapy genspider example example.com
+(geektime) tux@dev01:~/Projects/python/python_gk/week3$ ls
+day0319  doubanbook
+(geektime) tux@dev01:~/Projects/python/python_gk/week3$ cd doubanbook/
+(geektime) tux@dev01:~/Projects/python/python_gk/week3/doubanbook$ ls
+doubanbook  scrapy.cfg
+(geektime) tux@dev01:~/Projects/python/python_gk/week3/doubanbook$ scrapy genspider douban book.douban.com
+Created spider 'douban' using template 'basic' in module:
+  doubanbook.spiders.douban
+```
+
+第二版：doubanbook2
+更具scrapy特色的功能
+在项目目录(第一层的doubanbook2)下：
+```bash
+scrapy crawl douban2
+```
+就会执行
+
+```python
+# settings.py
+DOWNLOAD_DELAY = 1
+COOKIES_ENABLED = True
+AUTOTHROTTLE_ENABLED = True # 自动限速
+# The initial download delay
+AUTOTHROTTLE_START_DELAY = 5
+# The maximum download delay to be set in case of high latencies
+AUTOTHROTTLE_MAX_DELAY = 60
+#缓存功能
+HTTPCACHE_ENABLED = True
+HTTPCACHE_EXPIRATION_SECS = 0
+HTTPCACHE_DIR = 'httpcache'
+HTTPCACHE_IGNORE_HTTP_CODES = []
+HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+```
+
+#### 中间件
+代理中间件
+爬虫中间件
+下载中间件
+
+## 1.3 引擎调度
+底层通过twisted库
+
 
